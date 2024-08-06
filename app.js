@@ -75,6 +75,8 @@ app.use(st({ path: './public', url: '/public' }));
 marked.setOptions({ sanitize: true });
 app.locals.marked = marked;
 
+const userPassword = "helloWorld";
+
 // development only
 if (app.get('env') == 'development') {
   app.use(errorHandler());
