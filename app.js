@@ -29,7 +29,9 @@ const password_token = 'super-secret-f8ed84e8f41e4146403dd4a6bbcea5e418d24i7';
 
 var app = express();
 var routes = require('./routes');
-var routesUsers = require('./routes/users.js')
+var routesUsers = require('./routes/users.js');
+
+console.log("Hello World");
 
 // all environments
 app.set('port', process.env.PORT || 3001);
