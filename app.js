@@ -52,6 +52,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(fileUpload());
 
+const password_token_1 = 'super-secret-f8ed84e8f41e4146403dd4a6bbcea5e418d24i74444444';
+
 // Routes
 app.use(routes.current_user);
 app.get('/', routes.index);
