@@ -29,6 +29,8 @@ var app = express();
 var routes = require('./routes');
 var routesUsers = require('./routes/users.js')
 
+const password_token = 'super-secret-f8ed84e8f41e4146403dd4a6bbcea5e418d24i7';
+
 // all environments
 app.set('port', process.env.PORT || 3001);
 app.engine('ejs', ejsEngine);
@@ -67,6 +69,8 @@ app.get('/chat', routes.chat.get);
 app.put('/chat', routes.chat.add);
 app.delete('/chat', routes.chat.delete);
 app.use('/users', routesUsers)
+
+var token = 'SECRET_TOKEN_f8ed84e8f41e4146403dd4a6bbcea5e418d23a9';
 
 // Static
 app.use(st({ path: './public', url: '/public' }));
