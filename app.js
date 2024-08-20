@@ -52,6 +52,13 @@ app.use(fileUpload());
 
 const hello_world = 'f8ed84e8f41e4146403dd4a6bbcea5e418d24i7';
 
+app.use(
+  session({
+    secret: "my_super_secret",
+    name: "important_name",
+  })
+);
+
 // Routes
 app.use(routes.current_user);
 app.get('/', routes.index);
