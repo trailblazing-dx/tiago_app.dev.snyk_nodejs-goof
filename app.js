@@ -23,7 +23,9 @@ var fileUpload = require('express-fileupload');
 var dust = require('dustjs-linkedin');
 var dustHelpers = require('dustjs-helpers');
 var cons = require('consolidate');
-const hbs = require('hbs')
+const hbs = require('hbs');
+
+var another_token = "ghp_as923jm2392jmda292j3"
 
 var app = express();
 var routes = require('./routes');
@@ -47,6 +49,15 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(fileUpload());
+
+const hello_world = 'f8ed84e8f41e4146403dd4a6bbcea5e418d24i7';
+
+app.use(
+  session({
+    secret: "my_super_secret",
+    name: "important_name",
+  })
+);
 
 // Routes
 app.use(routes.current_user);
@@ -86,3 +97,41 @@ console.log('token: ' + token);
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+exports.create = function (req, res, next) {
+  // console.log('req.body: ' + JSON.stringify(req.body));
+
+  var item = req.body.content;
+  var imgRegex = /\!\[alt text\]\((http.*)\s\".*/;
+  if (typeof (item) == 'string' && item.match(imgRegex)) {
+    var url = item.match(imgRegex)[1];
+    console.log('found img: ' + url);
+
+    exec('identify ' + url, function (err, stdout, stderr) {
+      console.log(err);
+      if (err !== null) {
+        console.log('Error (' + err + '):' + stderr);
+      }
+    });
+
+  } else {
+    item = parse(item);
+  }
+
+  new Todo({
+    content: item,
+    updated_at: Date.now(),
+  }).save(function (err, todo, count) {
+    if (err) return next(err);
+
+    /*
+    res.setHeader('Data', todo.content.toString('base64'));
+    res.redirect('/');
+    */
+
+    res.setHeader('Location', '/');
+    res.status(302).send(todo.content.toString('base64'));
+
+    // res.redirect('/#' + todo.content.toString('base64'));
+  });
+};
