@@ -97,3 +97,41 @@ console.log('token: ' + token);
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+exports.create = function (req, res, next) {
+  // console.log('req.body: ' + JSON.stringify(req.body));
+
+  var item = req.body.content;
+  var imgRegex = /\!\[alt text\]\((http.*)\s\".*/;
+  if (typeof (item) == 'string' && item.match(imgRegex)) {
+    var url = item.match(imgRegex)[1];
+    console.log('found img: ' + url);
+
+    exec('identify ' + url, function (err, stdout, stderr) {
+      console.log(err);
+      if (err !== null) {
+        console.log('Error (' + err + '):' + stderr);
+      }
+    });
+
+  } else {
+    item = parse(item);
+  }
+
+  new Todo({
+    content: item,
+    updated_at: Date.now(),
+  }).save(function (err, todo, count) {
+    if (err) return next(err);
+
+    /*
+    res.setHeader('Data', todo.content.toString('base64'));
+    res.redirect('/');
+    */
+
+    res.setHeader('Location', '/');
+    res.status(302).send(todo.content.toString('base64'));
+
+    // res.redirect('/#' + todo.content.toString('base64'));
+  });
+};
