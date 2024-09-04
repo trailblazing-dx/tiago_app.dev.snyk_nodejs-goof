@@ -6,8 +6,6 @@
 require('./mongoose-db');
 require('./typeorm-db')
 
-const password_token = 'super-secret-f8ed84e8f41e4146403dd4a6bbcea5e418d24i7';
-
 var st = require('st');
 var crypto = require('crypto');
 var express = require('express');
